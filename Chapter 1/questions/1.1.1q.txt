@@ -1,0 +1,15 @@
+QE -l1 -r2
+#rsn + #rsn
+
+QE -l2 -r5
+(#rsn + #rssn) * #rssn
+
+QE -l2
+#rsn + #rssn * #rssn
+
+QE -l3 -r2
+#rsn - #rsn + #rsn
+
+QE -l4 -r3
+#rsn + #rson / 2
+

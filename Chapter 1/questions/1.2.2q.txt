@@ -1,0 +1,53 @@
+BV -l1 -r3
+#rv@1 = #rsen
+$#rv@2 = #rson
+#rv@1 + #rv@2
+
+BV -l1
+#rv@2 = #rson
+$#rv@1 = #rsen
+#rv@1 + #rv@2
+
+BV -l2 -r6
+#rv@1 = #rsen
+#rv@2 = #rson
+$#rv@1 + #rv@2
+
+BV -l2
+#rv@1 = #rsen
+#rv@2 = #rson
+#rv@1 + $#rv@2
+
+BV -l2
+#rv@1 = #rsen
+#rv@2 = #rson
+#rv@1 + $#rv@1
+
+BV -l2
+#rv@1 = #rsen
+#rv@2 = #rson
+$#rv@2 + #rv@2
+
+BV -l3 -r3
+#rv@1 = #rson
+#rv@2 = #rv@1 + #rson
+$#rv@1 + #rson
+
+BV -l3
+#rv@1 = #rson
+#rv@2 = #rv@1 + #rson
+$#rv@2 + #rson
+
+BV -l4 -r3
+#rv@1 = #rsen
+#rv@2 = #rv@1
+#rv@1 = #rv@1 + #rson
+#rv@2 = $#rv@2 + #rv@1
+#rv@2
+
+BV -l4
+#rv@1 = #rsen
+#rv@2 = #rv@1
+#rv@1 = #rv@1 + #rson
+#rv@2 = $#rv@1 + #rv@1
+#rv@2

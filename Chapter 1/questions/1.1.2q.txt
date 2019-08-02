@@ -1,0 +1,26 @@
+QE -l1 -r5
+#rb and #rb
+
+QE -l1
+#rb or #rb
+
+QE -l1
+not #rb
+
+QE -l2 -r5
+#rb or #rb and #rb
+
+QE -l2
+(#rb or #rb) and #rb
+
+QE -l3 -r5
+#rb or not #rb and #rb
+
+QE -l3
+#rb or #rb and not #rb
+
+QE -l3
+(not #rb or #rb) and #rb
+
+QE -l3
+(not #rb or #rb) and not #rb

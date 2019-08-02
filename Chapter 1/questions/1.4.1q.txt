@@ -1,0 +1,45 @@
+QE -l1 -r4
+#rst + #rst
+
+QE -l1
+#rss + #rst
+
+QE -l1
+#rst * #rssn
+
+QE -l2 -r3
+len(#rss + #rst)
+
+QE -l2
+len(#rst * #rssn)
+
+QE -l2
+len(#rst) * #rssn
+
+QE -l3 -r3
+#rst[:#rssn]
+
+QE -l3
+#rst[#rssn:]
+
+QE -l3
+#rst[1:3]
+
+QE -l4 -r3
+#rst@1[#rssn@1:] + #rst@1[:#rssn@1]
+
+QE -l4
+#rst@1[#rssn@1:] + #rst@2[:#rssn@1]
+
+QE -l4
+#rst@1[:#rssn@1] + #rst@2[#rssn@1:]
+
+QS -l5 -r1
+#rv@1 = #rss
+#rv@2 = #rst
+#rv@2[#risn@1] + #rv@1[#risn@2] + #rv@2[#risn@3]
+
+QS -l6 -r1
+#rv@1 = #rss
+#rv@2 = #rst
+#rv@2[-#rssn@1] + #rv@1[-1] + #rv@2[#rssn@2]

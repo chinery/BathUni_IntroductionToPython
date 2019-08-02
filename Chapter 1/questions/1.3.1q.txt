@@ -1,0 +1,46 @@
+QE -l1 -r7
+type(#rsn + #rsn)
+
+QE -l1
+type(#rson / 2)
+
+QE -l1
+type(#rsen / 2)
+
+QE -l1
+type(#rb and #rb)
+
+QE -l1
+type(#rsn > #rsn)
+
+QE -l1
+type(#rsn == #rsn)
+
+QE -l2 -r4
+#rsn == #rsn
+
+QE -l2
+#rsn != #rsn
+
+QE -l2
+#rsn >= #rsn
+
+QS -l3 -r2
+#rv@1 = #rsn
+#rv@1 = #rv@1 / 2
+type(#rv@1)
+
+QS -l3
+#rv@1 = #rsn
+#rv@1 = #rv@1 + #rsn
+type(#rv@1)
+
+QS -l4 -2
+#rv@1 = #rsn
+#rv@2 = #rsn
+#rv@1 < #rssn@1 or #rv@2 < #rssn@1
+
+QS -l4
+#rv@1 = #rb
+#rv@2 = #rsn
+#rv@1 or #rv@2 > #rsn

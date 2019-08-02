@@ -1,0 +1,59 @@
+QS -l1 -r2
+#rv@1 = #rsn
+#rv@1 * #rsn
+
+QS -l2 -r1
+#rv@1 = #rsn
+#rv@1 + #rv@1
+
+QS -l3 -r3
+#rv@1 = #rb
+#rv@1 and #rb
+
+QS -l3
+#rv@1 = #rb
+#rv@1 or #rb
+
+QS -l4 -r2
+#rv@1 = #rsn
+#rv@2 = #rsn
+#rv@1 + #rv@2
+
+QS -l5 -r1
+#rv@1 = True
+#rv@2 = False
+#rv@1 and not #rv@2
+
+QS -l6 -r4
+#rv@1 = #rsn
+#rv@2 = #rv@1 + #rsn
+#rv@1 + #rv@2
+
+QS -l6
+#rv@1 = #rsn
+#rv@1 = #rv@1 + #rsn
+#rv@2 = #rv@1
+#rv@1 + #rv@2
+
+QS -l6
+#rv@1 = #rb
+#rv@2 = not #rv@1
+#rv@1 or #rv@2
+
+QS -l6
+#rv@1 = #rb
+#rv@2 = not #rv@1
+#rv@2 and #rv@2
+
+QS -l7 -r2
+#rv@1 = #rsn
+#rv@2 = #rv@1
+#rv@1 = #rv@1 + #rsn
+#rv@1 + #rv@2
+
+QS -l7
+#rv@1 = #rsn
+#rv@2 = #rv@1
+#rv@1 = #rv@1 + #rsn
+#rv@2 = #rv@2 + #rv@1
+#rv@2
