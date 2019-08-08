@@ -1,0 +1,15 @@
+*name
+swap_ends
+*inpublic str
+hello
+oellh
+tt
+15
+a reasonably long string
+*insecret str
+python (plural pythons) n. A type of large constricting snake.
+?1111?
+ahBwZYyU3D8SKa7s7guMjmpSfG7TxJjHM3qxDMewhapvyqcjMcBKCB6cFR8RXXADXSQ7wUFk7u29m7jNWztk95chzVD7UKjnKzt
+*code
+def swap_ends(s):
+    return s[-1] + s[1:-1] + s[0]

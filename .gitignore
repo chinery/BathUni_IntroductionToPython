@@ -1,3 +1,6 @@
 .DS_Store
 .idea/
 .ipynb_checkpoints/
+/venv/
+/Chapter 1/.ipynb_checkpoints/
+/Chapter 2/.ipynb_checkpoints/

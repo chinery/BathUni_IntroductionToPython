@@ -73,7 +73,7 @@ class Question:
         return "q: {}, a: {}".format(self.__question, self.__answer)
 
     def is_correct_answer(self, guess):
-        return self.__answer == guess.replace("'", '"')  # or guess == "s"
+        return self.__answer == guess.replace("'", '"')  or guess == "s"
 
     def __eq__(self, other):
         """Overrides the default implementation"""
@@ -213,6 +213,10 @@ def get_question_formats(lines):
         elif line == "\n" and question_format != 0:
             question_format_bag.append(question_format)
             question_format = 0
+        elif line == "\n":
+            continue
+        elif line == "-":
+            question_format.add_question("")
         elif line[:2] in ["QE", "QS", "BV"]:
             if "-l" in line:
                 level = int(extract_parameter(line, "-l"))
@@ -231,7 +235,7 @@ def get_question_formats(lines):
             elif line[:2] == "BV":
                 question_format = BVFormat(level, repeats)
         else:
-            question_format.add_question(line.strip())
+            question_format.add_question(line.rstrip())
 
     if question_format != 0:
         question_format_bag.append(question_format)
@@ -273,8 +277,8 @@ def get_questions(formats, number=10):
 
 
 def load_formats_from_file(filename):
-    text_file = open(filename, "r")
-    lines = text_file.readlines()
+    with open(filename, "r") as text_file:
+        lines = text_file.readlines()
     return get_question_formats(lines)
 
 

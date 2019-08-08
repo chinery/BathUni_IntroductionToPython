@@ -1,0 +1,82 @@
+QS -l1 -r3
+def #rv@1(#rv@2):
+    return #rv@2 * #rssn
+#rv@1(#rsn)
+
+QS -l1
+def #rv@1(#rv@2):
+    return #rv@2 + #rsn
+#rv@1(#rsn)
+
+QS -l2 -r3
+def #rv@1(#rv@2):
+    #rv@3 = #rv@2 + #rssn
+    return #rv@3 * #rssn
+#rv@1(#rsn)
+
+QS -l2
+def #rv@1(#rv@2):
+    #rv@3 = #rv@2 + #rssn
+    return #rv@2 * #rssn
+#rv@1(#rsn)
+
+QS -l3 -r3
+def #rv@1(#rv@2, #rv@3):
+    return #rv@3 + #rv@2
+#rv@1(#rst@1, #rst@2)
+
+QS -l3
+def #rv@1(#rv@2, #rv@3):
+    return #rv@2 + #rv@3
+#rv@1(#rsn, #rsn)
+
+QS -l3
+def #rv@1(#rv@2, #rv@3):
+    return #rv@2 + #rv@3
+#rv@1(#rst@1, #rst@2)
+
+QS -l4 -r3
+#rv@1 = #rsn
+def #rv@2(#rv@3):
+    #rv@1 = #rv@3 + #rsn
+    return #rv@1
+#rv@2(#rv@1)
+
+QS -l4
+#rv@1 = #rsn
+def #rv@2(#rv@3):
+    #rv@1 = #rv@3 + #rsn
+    return #rv@3
+#rv@2(#rv@1)
+
+QS -l4
+def #rv@2(#rv@3):
+    #rv@1 = #rv@3 + #rsn
+    return #rv@1
+#rv@1 = #rsn
+#rv@2(#rv@1)
+
+QS -l5 -r1
+def #rv@1(#rv@2):
+    #rv@2 = #rv@2 + #rsn
+    return #rv@2
+#rv@2 = #rsn
+#rv@2 = #rv@1(#rv@2)
+#rv@2
+
+QS -l6 -r1
+def #rv@1(#rv@2):
+    #rv@2 = #rv@2 + #rsn
+    return #rv@2
+#rv@2 = #rsn
+#rv@1(#rv@2)
+#rv@2
+
+QS -l7 -r1
+def #rv@1(#rv@2):
+    #rv@2 = #rv@2 + #rsn
+    return #rv@2
+#rv@2 = #rsn
+#rv@1(#rv@2)
+
+

@@ -1,0 +1,29 @@
+QE -l1 -r3
+max(#rsn, #rsn)
+
+QE -l1
+min(#rsn, #rsn)
+
+QE -l1
+abs(-#rsn)
+
+QE -l2 -r1
+max(#rsn@1, #rsn@2, #rsn@3, #rsn@4)
+
+QS -l3 -r2
+#rv@1 = #rst
+#rv@1.find("i")
+
+QS -l3
+#rv@1 = #rst
+#rv@1.find("o")
+
+QS -l4
+dog = "fish"
+dog.replace("i", "o")
+dog
+
+QS -l5
+dog = "fish"
+dog = dog.replace("i", "o")
+dog
