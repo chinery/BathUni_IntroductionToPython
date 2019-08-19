@@ -3,6 +3,13 @@ import sys
 import textwrap
 
 
+def format_expected(expected):
+    if isinstance(expected, str):
+        return "'" + expected + "'"
+    else:
+        return expected
+
+
 def format_input(inp):
     return inp
 
@@ -12,7 +19,7 @@ def format_inputs(inputs):
 
 
 def format_test(test, name):
-    return f"{name}({format_inputs(test.get_inputs())}) -> {test.get_expected()}"
+    return f"{name}({format_inputs(test.get_inputs())}) -> {format_expected(test.get_expected())}"
 
 
 if __name__ == "__main__":

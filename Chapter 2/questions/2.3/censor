@@ -1,0 +1,25 @@
+*name
+censor
+*in plain str
+hello
+hell
+love
+trees
+balderdash
+ : Make sure your code works for the empty string!
+abc
+0000
+0000s
+00000
+*in secret_plain str
+aaa
+aa
+a
+
+aaaaaaa
+*code
+def censor(s):
+    if len(s) == 4 or len(s) == 5 and s[-1] == "s":
+        return "*"*len(s)
+    else:
+        return s

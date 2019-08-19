@@ -1,0 +1,28 @@
+*name
+censor_vowels_while
+*in plain str
+hello
+definite iteration
+aaaaahhhhhh
+\*****
+balderdash
+ : Make sure your code works for the empty string!
+\*a*b*c*
+12345
+*in secret_plain str
+?!?!
+abcdefghijklmnopqrstuvwyxz
+a
+aaaaaaa
+*code
+def censor_vowels_while(word):
+    out_str = ""
+    i = 0
+    while i < len(word):
+        char = word[i]
+        if char == "a" or char == "e" or char == "i" or char == "o" or char == "u":
+            out_str += "*"
+        else:
+            out_str += char
+        i += 1
+    return out_str

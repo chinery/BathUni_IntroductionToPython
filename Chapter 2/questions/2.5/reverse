@@ -1,0 +1,20 @@
+*name
+reverse
+*in plain str
+hello
+zebra
+fiddledeedee
+balderdash
+recursion is more fun than looping
+#?*!
+ : Make sure your code works for the empty string!
+*in secret_plain str
+abcdefghijklmnopqrstuvwyxz
+az09
+0123456789
+*code
+def reverse(text):
+    if text == "":
+        return ""
+    else:
+        return reverse(text[1:]) + text[0]

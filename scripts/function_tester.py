@@ -6,6 +6,11 @@ import textwrap
 def generic_hints(output):
     if output is None:
         return "Make sure you are always returning something from your function."
+    elif isinstance(output, IndexError):
+        return "There was an IndexError. Check your indexing. " \
+               "e.g. trying to access a character of an empty string will cause this error."
+    elif isinstance(output, Exception):
+        return "There was some kind of error. The actual section above should include more information."
     else:
         return ""
 

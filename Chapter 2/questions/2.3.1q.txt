@@ -1,0 +1,57 @@
+QS -l1 -r3
+def #rv@1(#rv@2):
+    if #rv@2 < #rsn@1:
+        return #rv@2 * #rsn@2
+    else:
+        return #rv@2 * #rsn@3
+#rv@1(#rsn)
+
+QS -l2 -r3
+def #rv@1(#rv@2, #rv@3):
+    if #rv@2 == #rv@3:
+        return 2 * (#rv@2 + #rv@3)
+    else:
+        return #rv@2 + #rv@3
+#rv@1(#rsn@1, #rsn@2)
+
+QS -l2
+def #rv@1(#rv@2, #rv@3):
+    if #rv@2 == #rv@3:
+        return 2 * (#rv@2 + #rv@3)
+    else:
+        return #rv@2 + #rv@3
+#rv@1(#rsn@1, #rsn@1)
+
+QS -l3 -r1
+def #rv@1(#rv@2):
+    return #rv@2 ** 2
+def #rv@3(#rv@2):
+    return 2 ** #rv@2
+-
+#rv@4 = 3
+if #rv@1(#rv@4) > #rv@3(#rv@4):
+    #rv@4 = #rv@1(#rv@4)
+else:
+    #rv@4 = #rv@3(#rv@4)
+#rv@4
+
+BV -l4 -r2
+#rv@1 = #rsn@1
+if #rv@1 $== #rsn@1:
+    #rv@1 = #rv@1 + #rsn
+#rv@1
+
+BV -l4
+#rv@1 = #rsn@1
+if #rv@1 == $#rsn@1:
+    #rv@1 = #rv@1 + #rsn
+#rv@1
+
+BV -l5 -r1
+#rv@1 = #rsn@1
+#rv@2 = #rsn@2
+if $#rv@1 != #rsn@1:
+    #rv@1 = #rv@1 + #rsn@3
+else:
+    #rv@2 = #rv@2 + #rsn@3
+#rv@1

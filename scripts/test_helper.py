@@ -1,8 +1,21 @@
 import random
 import math
 import numbers
+from typing import Iterable
 
 random.seed(0)
+boolrange = (False, True)
+
+
+class PrettyError:
+    def __init__(self, exception):
+        self.__exception = exception
+
+    def __str__(self):
+        return self.__repr__()
+
+    def __repr__(self):
+        return f"An error occurred...\n\t        {self.__exception.__class__.__name__}: {self.__exception}"
 
 
 class Test:
@@ -32,14 +45,19 @@ class Test:
         return self.__repr__()
 
     def __repr__(self):
-        return "inputs: {}, expected: {}".format(self.get_inputs, self.get_expected)
+        return "inputs: {}, expected: {}".format(self.get_inputs(), self.get_expected())
 
     def run(self, func):
-        self.__output = func(*self.__inputs)
+        try:
+            self.__output = func(*self.__inputs)
+        except Exception as e:
+            self.__output = PrettyError(e)
+
         # testing for equality usually requires horrible type checking
         if self.__output is None or self.__expected is None:
             self.__result = self.__output == self.__expected
         elif isinstance(self.__expected, numbers.Number):
+            # allow 'close enough' for floats
             # noinspection PyTypeChecker
             self.__result = math.isclose(self.__output, self.__expected)
         else:
@@ -47,9 +65,18 @@ class Test:
         return self.__result
 
 
+def nth_word(s, n):
+    sp = s.split()
+    if n < len(sp):
+        return sp[n]
+    else:
+        return ""
+
+
 class TestCaseSpec:
-    def __init__(self, inputs, types, hint=""):
-        self.__inputs = [t(i) for t, i in zip(types, inputs)]
+    def __init__(self, inputs, secret=False, hint=""):
+        self.__inputs = inputs
+        self.__secret = secret
         self.__hint = hint
 
     def get_inputs(self):
@@ -58,135 +85,223 @@ class TestCaseSpec:
     def get_hint(self):
         return self.__hint
 
+    def is_secret(self):
+        return self.__secret
+
+    def add_tests(self, tests, secret_tests, func):
+        answer = func(*self.get_inputs())
+        if not self.is_secret():
+            tests.append(Test(self.get_inputs(), answer, self.get_hint()))
+        else:
+            secret_tests.append(Test(self.get_inputs(), answer, self.get_hint()))
+
+
+class RandomTestCaseSpec(TestCaseSpec):
+    def __init__(self, inputs, repeats=1, secret=False, hint=""):
+        super().__init__(inputs, secret, hint)
+        self.__repeats = repeats
+
+    def add_tests(self, tests, secret_tests, func):
+        previous_inputs = [test.get_inputs() for test in tests]
+        previous_inputs.extend([test.get_inputs() for test in secret_tests])
+
+        spec = self.get_inputs()
+        spec = ["random." + i for i in spec]
+        for _ in range(self.__repeats):
+            inputs = [eval(randomspec) for randomspec in spec]
+            while inputs in previous_inputs:
+                inputs = [eval(randomspec) for randomspec in spec]
+            answer = func(*inputs)
+            if not self.is_secret():
+                tests.append(Test(inputs, answer))
+            else:
+                secret_tests.append(Test(inputs, answer))
+
+
+class RangeTestCaseSpec(TestCaseSpec):
+
+    # e.g. input [range(0,10), range(0,10)]
+    #            [range(0,10)]
+    #            [(1,), range(0,10)]
+    @staticmethod
+    def __get_range_specs(specs):
+        if len(specs) == 1:
+            return [[spec] for spec in specs[0]]
+        else:
+            return [[x, *spec] for x in specs[0] for spec in RangeTestCaseSpec.__get_range_specs(specs[1:])]
+
+    @staticmethod
+    def __iterableify(obj):
+        if isinstance(obj, Iterable):
+            return obj
+        else:
+            return (obj,)
+
+    def add_tests(self, tests, secret_tests, func):
+        previous_inputs = [test.get_inputs() for test in tests]
+        previous_inputs.extend([test.get_inputs() for test in secret_tests])
+
+        specs = self.get_inputs()
+        specs = [self.__iterableify(spec) for spec in specs]
+        specs = self.__get_range_specs(specs)
+
+        for inputs in specs:
+            if inputs in previous_inputs:
+                continue
+
+            answer = func(*inputs)
+            if not self.is_secret():
+                tests.append(Test(inputs, answer, self.get_hint()))
+            else:
+                secret_tests.append(Test(inputs, answer, self.get_hint()))
+
+
+class InputSpec:
+    """
+        An inputspec is used when reading a block of lines (TestCaseSpecs)
+    """
+    def __init__(self, secret=False):
+        self.__secret = secret
+
+    def is_secret(self):
+        return self.__secret
+
+    def format(self, line):
+        raise NotImplementedError("This is an abstract method")
+
+
+class PlainInputSpec(InputSpec):
+    """
+        Will look like this:
+        *in plain int;int
+        5;5
+        -1;-1 : Don't forget negative numbers
+    """
+    def __init__(self, line, secret=False):
+        super().__init__(secret)
+        in_type = nth_word(line, 2)
+        in_type = TestSpec.split_and_strip(in_type)
+        self.__types = [eval(x) for x in in_type]
+
+    def format(self, line):
+        line_sp = line.split(" : ")
+        inputs = TestSpec.split_and_strip(line_sp[0])
+        inputs = [t(i) for t, i in zip(self.__types, inputs)]
+        if len(line_sp) > 1:
+            return TestCaseSpec(inputs, secret=self.is_secret(), hint=line_sp[1])
+        else:
+            return TestCaseSpec(inputs, secret=self.is_secret())
+
+
+class RandomInputSpec(InputSpec):
+    """
+        Supports any method in random
+        Will look like this:
+        *in random 5
+        randrange(-10,10);randrange(-10,10)
+        uniform(-10,10);uniform(-10,10)
+    """
+    def __init__(self, line, secret=False):
+        super().__init__(secret)
+        self.__random_freq = int(nth_word(line, 2))
+
+    def format(self, line):
+        inputs = TestSpec.split_and_strip(line)
+        return RandomTestCaseSpec(inputs, self.__random_freq, self.is_secret())
+
+
+class RangeInputSpec(InputSpec):
+    """
+        Supports any iterators, and will generate all possibilities
+        Special:
+            boolrange
+        will be converted to
+            (False, True)
+
+        Will look like this:
+        *in range
+        range(0,10);range(5,10)
+        boolrange;boolrange
+    """
+    def format(self, line):
+        inputs = TestSpec.split_and_strip(line)
+        inputs = [eval(x) for x in inputs]
+        return RangeTestCaseSpec(inputs, self.is_secret())
+
 
 class TestSpec:
     SEP = ";"
-    MODES = {
-             "name": 0,
-             "inpublic": 1,
-             "insecret": 2,
-             "inrandom": 3,
-             "insecretrandom": 4,
-             "code": 5
-             }
+    MODES = ["name", "in", "code"]
 
     def __init__(self, filename):
-        self.__inpublic = []
-        self.__insecret = []
-        self.__inrandom = []
-        self.__insecretrandom = []
+        self.__inspecs = []
         self.__code = ""
         with open(filename, "r") as text_file:
             lines = text_file.readlines()
         self.__parse(lines)
-        self.__post_process()
-
-    @staticmethod
-    def __first_word(text):
-        ix = text.find(" ")
-        if ix != -1:
-            return text[:ix]
-        else:
-            return text
-
-    @staticmethod
-    def __second_word(text):
-        ix = text.index(" ")
-        end_ix = text.find(" ", ix+1)
-        if end_ix != -1:
-            return text[ix+1:end_ix]
-        else:
-            return text[ix+1:]
 
     def __parse(self, text_lines):
         mode = None
-        random_freq = 1
-        in_type = None
+        in_spec = None
 
         for line in text_lines:
             line = line.rstrip()
-            if line[0] == "*":
-                word = TestSpec.__first_word(line)[1:]
-                if word not in TestSpec.MODES.keys():
-                    raise RuntimeError("Unsupported *mode")
-                mode = TestSpec.MODES[word]
+            escape = False
+            if len(line) > 1:
+                if line[0:2] == "//":
+                    continue
+                if line[0:2] == r"\*":
+                    escape = True
+                    line = line[1:]
 
-                if word == "inpublic" or word == "insecret":
-                    in_type = TestSpec.__second_word(line)
-                    in_type = TestSpec.__split_and_strip(in_type)
-                    in_type = [eval(x) for x in in_type]
-                elif word == "inrandom" or word == "insecretrandom":
-                    random_freq = int(TestSpec.__second_word(line))
+            if len(line) > 0 and line[0] == "*" and not escape:
+                word = nth_word(line, 0)[1:]
+                if word not in TestSpec.MODES:
+                    raise RuntimeError("Unsupported *mode")
+                mode = word
+
+                if word == "in":
+                    if nth_word(line, 1) == "plain":
+                        in_spec = PlainInputSpec(line, False)
+                    elif nth_word(line, 1) == "secret_plain":
+                        in_spec = PlainInputSpec(line, True)
+                    elif nth_word(line, 1) == "random":
+                        in_spec = RandomInputSpec(line, False)
+                    elif nth_word(line, 1) == "secret_random":
+                        in_spec = RandomInputSpec(line, True)
+                    elif nth_word(line, 1) == "range":
+                        in_spec = RangeInputSpec(False)
+                    elif nth_word(line, 1) == "secret_range":
+                        in_spec = RangeInputSpec(True)
+                    else:
+                        raise RuntimeError("Didn't recognise input format")
+
             elif mode is None:
                 raise RuntimeError("Need *mode before data")
-            elif mode == 0:
+            elif mode == "name":
                 self.__name = line
-            elif mode == 1 or mode == 2:
-                line_sp = line.split(" : ")
-                inputs = TestSpec.__split_and_strip(line_sp[0])
-                if len(line_sp) > 1:
-                    test_case_spec = TestCaseSpec(inputs, in_type, line_sp[1])
-                else:
-                    test_case_spec = TestCaseSpec(inputs, in_type)
-
-                if mode == 1:
-                    self.__inpublic.append(test_case_spec)
-                else:
-                    self.__insecret.append(test_case_spec)
-            elif mode == 3:
-                self.__inrandom.extend([line for _ in range(random_freq)])
-            elif mode == 4:
-                self.__insecretrandom.extend([line for _ in range(random_freq)])
-            elif mode == 5:
+            elif mode == "in":
+                self.__inspecs.append(in_spec.format(line))
+            elif mode == "code":
                 if self.__code == "":
                     self.__code = line
                 else:
                     self.__code += "\n" + line
 
     @staticmethod
-    def __split_and_strip(line):
+    def split_and_strip(line):
         return [x.strip() for x in line.split(TestSpec.SEP)]
-
-    def __post_process(self):
-        inr = [TestSpec.__split_and_strip(line) for line in self.__inrandom]
-        self.__inrandom = [["random." + i for i in line] for line in inr]
-
-        inr = [TestSpec.__split_and_strip(line) for line in self.__insecretrandom]
-        self.__insecretrandom = [["random." + i for i in line] for line in inr]
 
     def generate_tests(self):
         tests = []
         secret_tests = []
 
-        exec(self.__code)
-        assert (self.__name in dir())
+        exec(self.__code, locals(), locals())
+        assert(self.__name in dir())
         solution_function = eval(self.__name)
 
-        for inputs in self.__inpublic:
-            answer = solution_function(*inputs.get_inputs())
-            tests.append(Test(inputs.get_inputs(), answer, inputs.get_hint()))
-
-        for inputs in self.__insecret:
-            answer = solution_function(*inputs.get_inputs())
-            secret_tests.append(Test(inputs.get_inputs(), answer, inputs.get_hint()))
-
-        random_inputs = []
-        for spec in self.__inrandom:
-            inputs = [eval(randomspec) for randomspec in spec]
-            while inputs in random_inputs:
-                inputs = [eval(randomspec) for randomspec in spec]
-            random_inputs.append(inputs)
-            answer = solution_function(*inputs)
-            tests.append(Test(inputs, answer))
-
-        random_inputs = []
-        for spec in self.__insecretrandom:
-            inputs = [eval(randomspec) for randomspec in spec]
-            while inputs in random_inputs:
-                inputs = [eval(randomspec) for randomspec in spec]
-            random_inputs.append(inputs)
-            answer = solution_function(*inputs)
-            secret_tests.append(Test(inputs, answer))
+        for input_spec in self.__inspecs:
+            input_spec.add_tests(tests, secret_tests, solution_function)
 
         return tests, secret_tests
 
@@ -194,13 +309,18 @@ class TestSpec:
         return self.__name
 
 
-if __name__ == "__main__":
+def run():
     test_test = Test([1, 2], 3)
 
-    print(test_test.run(lambda x, y: x+y))
+    print(test_test.run(lambda x, y: x + y))
 
-    spec = TestSpec("../Chapter 2/questions/add")
+    # spec = TestSpec("../Chapter 2/questions/add")
+    spec = TestSpec("../Chapter 2/questions/2.5/reverse")
     tests, secret_tests = spec.generate_tests()
     print()
+
+
+if __name__ == "__main__":
+    run()
 
 

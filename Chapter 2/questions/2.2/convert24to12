@@ -1,0 +1,13 @@
+*name
+convert24to12
+*in plain int
+15
+3 : The code still needs to work for AM hours. Look back at the modulo operation.
+23
+1
+0 : This one is tricky! 0 is midnight which is 12 in the 12-hour clock format. Try manipulating the number before and after the modulo. What is -1 modulo 12?
+*in secret_range int
+range(0,24)
+*code
+def convert24to12(x):
+    return ((x-1) % 12)+1

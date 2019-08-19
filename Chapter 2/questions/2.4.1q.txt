@@ -1,0 +1,44 @@
+QS -l1 -r4
+def #rv@1(#rv@2):
+    #rv@3 = 0
+    for i in range(#rv@2):
+        if i % 2 == 0:
+            #rv@3 += i
+    return #rv@3
+#rv@1(#rmn)
+
+QS -l1
+def #rv@1(#rv@2):
+    #rv@3 = 0
+    for i in range(#rmn):
+        if i % 2 == 0:
+            #rv@3 += #rv@2
+    return #rv@3
+#rv@1(#rsn)
+
+QS -l1
+def #rv@1(#rv@2):
+    #rv@3 = 0
+    for i in range(#rmn):
+        #rv@3 += i % #rv@2
+    return #rv@3
+#rv@1(#rssn)
+
+QS -l1
+def #rv@1(#rv@2):
+    #rv@3 = 0
+    while #rv@2 > 0:
+        #rv@3 += 1
+        #rv@2 = #rv@2 // 2
+    return #rv@3
+#rv@1(#rmn)
+
+QS -l2 -r1
+def #rv@1(#rv@2):
+    #rv@3 = ""
+    while len(#rv@2) > 0:
+        #rv@3 = #rv@3 + #rv@2[-1]
+        #rv@2 = #rv@2[:-1]
+    return #rv@3
+#rv@1(#rst)
+

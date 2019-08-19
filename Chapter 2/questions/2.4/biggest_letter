@@ -1,0 +1,21 @@
+*name
+biggest_letter
+*in plain str
+hello
+while loop
+zebra
+fiddledeedee
+balderdash
+23
+ : Make sure your code works for the empty string!
+*in secret_plain str
+abcdefghijklmnopqrstuvwyxz
+az09
+0123456789
+*code
+def biggest_letter(word):
+    biggest = ""
+    for c in word:
+        if c > biggest:
+            biggest = c
+    return biggest

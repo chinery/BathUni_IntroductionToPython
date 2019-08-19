@@ -11,6 +11,7 @@ class RNGFormat:
                       "#rsen": [2, 4, 6, 8],    # random small even number
                       "#rson": [1, 3, 5],       # random small odd number
                       "#risn": [0, 1, 2, 3],    # random index small number (inc 0)
+                      "#rmn": [6, 7, 8, 9],     # random medium number
                       "#rb": [True, False],     # random boolean
                       "#rv": ["dog", "fox", "pig", "egg"],       # random variable name
                       "#rst": ['"wolf"', '"fish"', '"lion"'],    # random string
@@ -163,7 +164,7 @@ class BVFormat(QuestionFormat):
         eval_answer = out_str(eval(code_to_eval))
 
         dollar_index = formatted_question.index("$")
-        re_match = re.search(r'\s', formatted_question[dollar_index:])
+        re_match = re.search(r'[\s:]', formatted_question[dollar_index:])
         if re_match is not None:
             next_space = re_match.start() + dollar_index
         else:
@@ -215,7 +216,7 @@ def get_question_formats(lines):
             question_format = 0
         elif line == "\n":
             continue
-        elif line == "-":
+        elif line == "-\n":
             question_format.add_question("")
         elif line[:2] in ["QE", "QS", "BV"]:
             if "-l" in line:

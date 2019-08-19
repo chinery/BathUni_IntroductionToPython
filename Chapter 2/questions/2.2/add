@@ -1,6 +1,6 @@
 *name
 add
-*inpublic int;int
+*in plain int;int
 1;1
 1;0
 0;1
@@ -8,16 +8,16 @@ add
 -1;1 : Your code also needs to work for negative numbers!
 -5;1
 1;-5
-*inrandom 5
+*in random 5
 randrange(-10,10);randrange(-10,10)
-*inrandom 1
+*in random 1
 randrange(-10000,-9000);randrange(9000,10000)
 randrange(9000,10000);randrange(-10000,-9000)
 randrange(9000,10000);randrange(9000,10000)
 randrange(-10000,-9000);randrange(-10000,-9000)
-*inrandom 4
+*in random 4
 uniform(-10,10);uniform(-10,10)
-*insecretrandom 5
+*in secret_random 5
 randrange(-10,10);uniform(-10,10)
 uniform(-10,10);randrange(-10,10)
 *code

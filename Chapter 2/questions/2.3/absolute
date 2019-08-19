@@ -1,0 +1,19 @@
+*name
+absolute
+*in plain int
+5
+-5
+0
+-10000000000000
+*in plain float
+-0.5
+*in random 5
+randrange(-10,10)
+uniform(-10,10)
+*in secret_random 1
+randrange(-1e6,-1e6+1e5)
+randrange(1e6-1e6,1e6)
+uniform(-1e-5,1e-5)
+*code
+def absolute(x):
+    return max(-x,x)
