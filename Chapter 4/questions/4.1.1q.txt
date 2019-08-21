@@ -1,0 +1,43 @@
+QS -l1 -r2
+#rv@1 = [#rsn@1, #rsn@2, #rsn@3, #rsn@4]
+#rv@1[#risn]
+
+QE -l2 -r4
+[#rsn, #rsn] + [#rsn]
+
+QS -l2
+#rv@1 = [#rsn]
+#rv@1.append(#rsn)
+#rv@1.insert(0, #rsn)
+#rv@1
+
+QS -l2
+#rv@1 = [#rsn, #rsn, #rsn, #rsn, #rsn]
+#rv@1[1:3]
+
+QS -l2
+#rv@1 = [#rsn, #rsn, #rsn, #rsn, #rsn]
+#rv@1[-#rssn]
+
+QS -l3 -r1
+#rv@1 = [#rsn, #rsn, #rsn, #rsn, #rsn]
+#rv@1[1:2]
+
+QS -l4 -r1
+#rv@1 = []
+#rv@1.append(#rsn@1)
+#rv@1.append(#rsn@2)
+#rv@1.reverse()
+#rv@1
+
+QS -l5 -r1
+#rv@1 = [#rsn@1, #rsn@2, #rsn@3]
+#rv@2 = #rv@1.copy()
+#rv@2[0] = #rsn@4
+#rv@1[0] + #rv@2[0]
+
+QS -l6 -r1
+#rv@1 = [#rsn@1, #rsn@2, #rsn@3]
+#rv@2 = #rv@1
+#rv@2[0] = #rsn@4
+#rv@1[0] + #rv@2[0]

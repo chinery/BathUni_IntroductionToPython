@@ -19,11 +19,15 @@ QS -l3
 #rv@1.find("o")
 
 QS -l4
+#rv@1 = #rst
+#rv@1.replace("i", "o")
+
+QS -l5
 dog = "fish"
 dog.replace("i", "o")
 dog
 
-QS -l5
+QS -l6
 dog = "fish"
 dog = dog.replace("i", "o")
 dog

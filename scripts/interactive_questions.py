@@ -74,7 +74,25 @@ class Question:
         return "q: {}, a: {}".format(self.__question, self.__answer)
 
     def is_correct_answer(self, guess):
-        return self.__answer == guess.replace("'", '"')  or guess == "s"
+        guess = guess.replace("'", '"')
+        comp_answer = self.__answer
+
+        if "[" in comp_answer or "(" in comp_answer:
+            # ignore whitespace in list/tuple answers
+            # (but leave it in the official answer in case they ask for the solution)
+            guess = guess.replace(" ", "")
+            comp_answer = comp_answer.replace(" ", "")
+
+        return comp_answer == guess.replace("'", '"') or guess == "s"
+
+    def get_hint(self, guess):
+        if '"' in self.__answer and '"' not in guess and "'" not in guess:
+            return "Don't forget to use quote marks around string literals"
+        else:
+            return ""
+
+    def get_solution(self):
+        return self.__answer
 
     def __eq__(self, other):
         """Overrides the default implementation"""
@@ -140,7 +158,7 @@ class QSEFormat(QuestionFormat):
         answer = out_str(eval(formatted_eval))
         return Question("After the following code is executed:\n"
                         "{}\n"
-                        "What is the result of this expression?\n"
+                        "What is the result of the expression below?\n"
                         "{}".format(formatted_exec, formatted_eval),
                         answer)
 
@@ -291,17 +309,34 @@ def run(file):
         for question_number, question in enumerate(questions):
             print("Question {} of {}".format(question_number+1, len(questions)))
             unsolved = True
+            attempt = 1
             while unsolved:
                 print(question.get_question())
 
                 guess = input(">>>")
-                if question.is_correct_answer(guess.strip()):
+                guess = guess.strip()
+                if question.is_correct_answer(guess):
                     print("Correct!\n")
                     unsolved = False
                 elif guess == "quit":
                     return
+                elif attempt >= 4 and guess == "I give up":
+                    print("The solution is:")
+                    print("\t" + question.get_solution())
+                    print("Work out why this is the case before continuing!")
+                    print("Please type 'I understand' (without quotes) to continue.")
+                    busywork = input(">>>")
+                    while busywork != "I understand":
+                        busywork = input(">>>")
+                    unsolved = False
+                elif question.get_hint(guess) != "":
+                    print(question.get_hint(guess) + "\n")
                 else:
                     print("Try again...\n")
+
+                attempt += 1
+                if attempt >= 4 and unsolved:
+                    print("** Type 'I give up' (without quotes) to see the solution **")
 
         print("All questions answered correctly! Great job.")
         response = ""

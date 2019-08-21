@@ -1,0 +1,28 @@
+*name
+filter_less_than
+*in plain eval;int
+[1, 2, 3, 4, 5];4
+[1, 2, 3, 4, 5];2
+[1, 2, 3, 4, 5];1
+[];5
+[-100, 0, 1000, 50];100
+[5];4
+[4];5
+[0];-1
+[-1];0
+*in plain eval;eval
+[random.randrange(0,10) for _ in range(0,10)];random.randrange(2,8)
+[random.randrange(0,10) for _ in range(0,10)];random.randrange(2,8)
+*in secret_plain eval;eval
+[random.randrange(10,100) for _ in range(0,10)];random.randrange(20,90)
+[random.randrange(10,100) for _ in range(0,10)];random.randrange(20,90)
+[random.randrange(10,100) for _ in range(0,10)];random.randrange(20,90)
+[random.randrange(10,100) for _ in range(10,100)];random.randrange(20,90)
+[random.randrange(10,100) for _ in range(10,100)];random.randrange(20,90)
+*code
+def filter_less_than(my_list, limit):
+    new_list = []
+    for num in my_list:
+        if num < limit:
+            new_list.append(num)
+    return new_list

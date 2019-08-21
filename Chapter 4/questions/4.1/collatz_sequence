@@ -1,0 +1,30 @@
+*name
+collatz_sequence
+*in plain int
+2
+3
+4
+5
+6
+7
+64
+256
+1024
+*in secret_plain int
+1
+1000
+1073741824
+*in secret_random 2
+randrange(1000, 5000)
+*code
+def collatz_sequence(n):
+    steps = 0
+    sequence = []
+    while(n != 1):
+        sequence.append(n)
+        if n % 2 == 0:
+            n = n // 2
+        else:
+            n = 3*n + 1
+    sequence.append(n)
+    return sequence

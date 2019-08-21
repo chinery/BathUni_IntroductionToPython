@@ -1,6 +1,8 @@
 import random
 import math
 import numbers
+import traceback
+import sys
 from typing import Iterable
 
 random.seed(0)
@@ -8,14 +10,18 @@ boolrange = (False, True)
 
 
 class PrettyError:
-    def __init__(self, exception):
+    def __init__(self, exception, line):
         self.__exception = exception
+        self.__line = line
 
     def __str__(self):
         return self.__repr__()
 
     def __repr__(self):
-        return f"An error occurred...\n\t        {self.__exception.__class__.__name__}: {self.__exception}"
+        return f"An error occurred on the line:" \
+               f"\n\t          {self.__line}" \
+               f"\n\t        The error was:" \
+               f"\n\t          {self.__exception.__class__.__name__}: {self.__exception}"
 
 
 class Test:
@@ -51,7 +57,10 @@ class Test:
         try:
             self.__output = func(*self.__inputs)
         except Exception as e:
-            self.__output = PrettyError(e)
+            # this hideousness extracts the line of code that caused the error
+            data = traceback.extract_tb(sys.exc_info()[2])
+            line = data[-1][-1]
+            self.__output = PrettyError(e, line)
 
         # testing for equality usually requires horrible type checking
         if self.__output is None or self.__expected is None:

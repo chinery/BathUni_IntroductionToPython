@@ -79,4 +79,9 @@ def #rv@1(#rv@2):
 #rv@2 = #rsn
 #rv@1(#rv@2)
 
-
+QS -l8 -r1
+def #rv@1(#rv@2):
+    return #rv@2 * #rssn
+def #rv@3(#rv@4):
+    return #rv@4 + #rsn
+#rv@1(#rv@3(#rsn))
