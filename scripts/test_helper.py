@@ -61,6 +61,8 @@ class Test:
             data = traceback.extract_tb(sys.exc_info()[2])
             line = data[-1][-1]
             self.__output = PrettyError(e, line)
+            # for now assume no deliberate errors... might need to change this
+            return False
 
         # testing for equality usually requires horrible type checking
         if self.__output is None or self.__expected is None:
