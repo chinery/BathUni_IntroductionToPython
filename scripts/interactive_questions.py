@@ -225,6 +225,7 @@ def extract_parameter(line, option):
 def get_question_formats(lines):
     question_format = 0
     question_format_bag = []
+    QTYPES = {"QE", "QS", "BV"}
 
     for line in lines:
         if line[:2] == "//":
@@ -236,7 +237,7 @@ def get_question_formats(lines):
             continue
         elif line == "-\n":
             question_format.add_question("")
-        elif line[:2] in ["QE", "QS", "BV"]:
+        elif line[:2] in QTYPES:
             if "-l" in line:
                 level = int(extract_parameter(line, "-l"))
             else:
