@@ -4,9 +4,19 @@ import numbers
 import traceback
 import sys
 from typing import Iterable
+import copy
 
 random.seed(0)
 boolrange = (False, True)
+
+
+class ModifiedInput:
+    def __str__(self):
+        return self.__repr__()
+
+    def __repr__(self):
+        return "Your code modified the input! This is not allowed." \
+               "\n\t        Try creating a copy if you need to modify the object."
 
 
 class PrettyError:
@@ -27,13 +37,14 @@ class PrettyError:
 class Test:
     def __init__(self, inputs, expected, hint=""):
         self.__inputs = inputs
+        self.__original_inputs = copy.deepcopy(inputs)
         self.__expected = expected
         self.__hint = hint
         self.__output = None
         self.__result = None
 
     def get_inputs(self):
-        return self.__inputs
+        return self.__original_inputs
 
     def get_expected(self):
         return self.__expected
@@ -64,8 +75,11 @@ class Test:
             # for now assume no deliberate errors... might need to change this
             return False
 
+        if self.__inputs != self.__original_inputs:
+            self.__output = ModifiedInput()
+            return False
         # testing for equality usually requires horrible type checking
-        if self.__output is None or self.__expected is None:
+        elif self.__output is None or self.__expected is None:
             self.__result = self.__output == self.__expected
         elif isinstance(self.__expected, numbers.Number):
             # allow 'close enough' for floats
@@ -242,7 +256,7 @@ class RangeInputSpec(InputSpec):
 
 class TestSpec:
     SEP = ";"
-    MODES = ["name", "in", "code"]
+    MODES = {"name", "in", "code"}
 
     def __init__(self, filename):
         self.__inspecs = []

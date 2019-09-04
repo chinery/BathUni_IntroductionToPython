@@ -1,0 +1,20 @@
+*name
+sub_cipher
+*in plain str;eval
+test;{"t": "f"}
+pear;{"r": "p", "p": "r"} : Try going through the string rather than the dictionary.
+string;{}
+011011;{"0": "1", "1": "0"}
+hello!;{"!": "?"}
+the quick brown fox jumped over the lazy dog;{'a': 'i', 'b': 's', 'c': 'w', 'd': 'l', 'e': 'r', 'f': 'a', 'g': 'g', 'h': 'b', 'i': 'u', 'j': 'v', 'k': 'p', 'l': 'k', 'm': 'z', 'n': 'm', 'o': 'c', 'p': 'o', 'q': 'n', 'r': 't', 's': 'h', 't': 'x', 'u': 'e', 'v': 'q', 'w': 'f', 'x': 'j', 'y': 'y', 'z': 'd'}
+*in secret_plain str;eval
+!the quick brown fox jumped over the lazy dog!;{'a': 'z', 'c': 'o', 'b': 'g', 'e': 'i', 'd': 'b', 'g': 'd', 'f': 's', 'i': 'h', 'h': 'u', 'k': 'x', 'j': 'j', 'm': 'a', 'l': 'e', 'o': 'l', 'n': 'v', 'q': 't', 'p': 'n', 's': 'm', 'r': 'y', 'u': 'f', 't': 'k', 'w': 'q', 'v': 'p', 'y': 'r', 'x': 'w', 'z': 'c'}
+*code
+def sub_cipher(s, dic):
+    newstr = ""
+    for c in s:
+        if c in dic:
+            newstr += dic[c]
+        else:
+            newstr += c
+    return newstr
