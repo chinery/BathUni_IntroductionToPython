@@ -1,3 +1,9 @@
+0.2.0 – Big content update and various smaller bug fixes:
+        - Clarified text around substrings
+        - Fixed various bad links
+        - Chapter 5 and 6 content
+      - Section 6.5 is coming soon and is currently the final planned updated.
+
 0.1.2 – Bug fixes to Welcome page and demo page.
 
 0.1.1 – Added Slack details.
