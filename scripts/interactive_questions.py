@@ -88,6 +88,8 @@ class Question:
     def get_hint(self, guess):
         if '"' in self.__answer and '"' not in guess and "'" not in guess:
             return "Don't forget to use quote marks around string literals"
+        elif guess.lower() == self.__answer.lower():
+            return "The answer is case sensitive"
         else:
             return ""
 
@@ -99,6 +101,14 @@ class Question:
         if isinstance(other, Question):
             return self.__question == other.__question
         return False
+
+
+class BVQuestion(Question):
+    def get_hint(self, guess):
+        solution_length = len(self.get_solution())
+        if solution_length != len(guess):
+            return f"The number of underscores shows the length of the correct answer ({solution_length})"
+        return super().get_hint(guess)
 
 
 class QuestionFormat:
@@ -191,10 +201,10 @@ class BVFormat(QuestionFormat):
         answer = formatted_question[dollar_index+1:next_space]
         formatted_question = formatted_question.replace("$" + answer, "_" * len(answer))
 
-        return Question("The result of running the following code is {}.\n"
-                        "What should fill in the blank?\n"
-                        "{}".format(eval_answer, formatted_question),
-                        answer)
+        return BVQuestion("The result of running the following code is {}.\n"
+                          "What should fill in the blank?\n"
+                          "{}".format(eval_answer, formatted_question),
+                          answer)
 
 
 class FormatDeck:

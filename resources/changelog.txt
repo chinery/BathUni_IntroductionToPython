@@ -1,11 +1,16 @@
-0.2.0 – Big content update and various smaller bug fixes:
+1.3.0 – Added +1.0.0 to all version numbers to clarify that this code is considered “in production”!
+      – Section 6.5 and Appendix A added
+      – Quizzes now give some more hints in specific situations (see section 6.5) 
+      – That's all for the scheduled updates, bug fixes will keep coming.
+
+1.2.0 – Big content update and various smaller bug fixes:
         - Clarified text around substrings
         - Fixed various bad links
         - Chapter 5 and 6 content
       - Section 6.5 is coming soon and is currently the final planned updated.
 
-0.1.2 – Bug fixes to Welcome page and demo page.
+1.1.2 – Bug fixes to Welcome page and demo page.
 
-0.1.1 – Added Slack details.
+1.1.1 – Added Slack details.
 
-0.1.0 – First public version. All basic material (Chapters 1 to 4) finished.
+1.1.0 – First public version. All basic material (Chapters 1 to 4) finished.
