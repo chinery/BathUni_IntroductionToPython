@@ -102,6 +102,9 @@ class Question:
             return self.__question == other.__question
         return False
 
+    def __hash__(self):
+        return hash(self.__question)
+
 
 class BVQuestion(Question):
     def get_hint(self, guess):
